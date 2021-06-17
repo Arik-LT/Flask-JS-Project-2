@@ -1,0 +1,58 @@
+{% extends "base.html" %} {% block title %}Transactions{% endblock %} {% block
+js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
+<body>
+  <section class="container">
+    <header>Crypto Sim</header>
+    <p>
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia, est
+      quam! Laboriosam, ab. Qui perspiciatis nihil eligendi cum tenetur. Sunt
+      molestias quis fugiat voluptatibus eaque?
+    </p>
+    <div class="row">
+      <label for="conversion">Conversion</label>
+      <input type="number" name="conversion" id="conversion" step="any"
+      style="width: 205px;"" />
+    </div>
+    <div class="row">
+      <label for="conversion">From</label>
+      <input
+        type="text"
+        name="conversion"
+        id="conv-from"
+        style="width: 100px"
+      />
+      <label for="conversion">To</label>
+      <input
+        type="text"
+        name="conv-to"
+        id="conv-to"
+        style="width: 100px"
+      />
+    </div>
+    <div class="row">
+      <input type="submit" />
+    </div>
+  </section>
+  <br />
+  <section class="container">
+    <header>Movimientos</header>
+    <div class="lista-movimientos">
+      <table class="tabla-movimientos">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>From</th>
+            <th>Cantidad</th>
+            <th>To</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+  <footer>&copy 2021</footer>
+</body>
+
+{% endblock %}
