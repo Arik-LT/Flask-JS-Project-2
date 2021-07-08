@@ -1,4 +1,4 @@
-from flask import json, render_template, jsonify
+from flask import json, render_template, jsonify, request, Response
 from crypto import app
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
@@ -7,6 +7,8 @@ import config
 from crypto.dataaccess import DBmanager
 from config import *
 import sqlite3
+from http import HTTPStatus
+import datetime # try to use for date time on sql
 
 dbManager = DBmanager(app.config.get("DATABASE"))
 
@@ -64,3 +66,43 @@ def movimientos():
     return jsonify ({"status": "success", "movimientos":lista})
   except sqlite3.Error as e:
     return jsonify ({"status": "fail", "mensaje":str(e)})
+
+
+@app.route('/api/v1/par/<_from>/<_to>/<quantity>')
+# @app.route('/api/v1/par/<_from>/<_to>')
+def par(_from, _to, quantity = 1.0):
+    url = f"https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={quantity}&symbol={_from}&convert={_to}&CMC_PRO_API_KEY={config.coin_key}"
+    res = requests.get(url)
+    data = res.json()["data"]
+    quote = data["quote"]
+    print(data)
+    print(quote)
+    return Response(quote)
+
+
+"""
+@app.route('/api/v1/par')
+def par():
+  if request.method == 'POST':
+    print(request.form)
+  
+  return render_template('transactions.html')
+"""
+
+
+
+@app.route("/api/v1/nuevomov", methods = ["POST"])
+def nuevomov():
+  
+  try:
+    if request.method == "POST":
+      pass
+
+  except sqlite3.Error as e:
+    return jsonify({"status": "fail", "mensaje": "Error en base de datos: {}".format(e)}), HTTPStatus.BAD_REQUEST
+
+
+@app.route("/api/v1/status")
+def status():
+  pass
+

@@ -8,31 +8,61 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
       quam! Laboriosam, ab. Qui perspiciatis nihil eligendi cum tenetur. Sunt
       molestias quis fugiat voluptatibus eaque?
     </p>
-    <div class="row">
-      <label for="conversion">Conversion</label>
-      <input type="number" name="conversion" id="conversion" step="any"
-      style="width: 205px;"" />
-    </div>
+    <div>
+    <div><h4>Formulario</h4></div>
     <div class="row">
       <label for="conversion">From</label>
-      <input
-        type="text"
-        name="conversion"
-        id="conv-from"
-        style="width: 100px"
-      />
+      <select name="conversion" id="conv_from" style="width: 150px">
+        <option value="EUR">Euro</option>
+        <option value="BTC">Bitcoin</option>
+        <option value="ETH">Ethereum</option>
+        <option value="XRP">Ripple</option>
+        <option value="LTC">Lite Coin</option>
+        <option value="BCH">Bitcoin Cash</option>
+        <option value="BNB">Binance Coin</option>
+        <option value="USDT">US Dollar</option>
+        <option value="EOS">EOS</option>
+        <option value="BSV">Bitcoin SV</option>
+        <option value="XLM">Stellar Lumens</option>
+        <option value="ADA">Cardano</option>
+        <option value="TRX">Tron</option>
+      </select>
       <label for="conversion">To</label>
-      <input
-        type="text"
-        name="conv-to"
-        id="conv-to"
-        style="width: 100px"
-      />
+      <select name="conversion" id="conv_to" style="width: 150px">
+        <option value="EUR">Euro</option>
+        <option value="BTC">Bitcoin</option>
+        <option value="ETH">Ethereum</option>
+        <option value="XRP">Ripple</option>
+        <option value="LTC">Lite Coin</option>
+        <option value="BCH">Bitcoin Cash</option>
+        <option value="BNB">Binance Coin</option>
+        <option value="USDT">US Dollar</option>
+        <option value="EOS">EOS</option>
+        <option value="BSV">Bitcoin SV</option>
+        <option value="XLM">Stellar Lumens</option>
+        <option value="ADA">Cardano</option>
+        <option value="TRX">Tron</option>
+      </select>
     </div>
     <div class="row">
-      <input type="submit" />
+      <label for="cantidad_from">Cantidad</label>
+      <input type="number" name="cantidad_from" id="cantidad_from" step="any"
+      style="width: 106px;"" />
     </div>
-  </section>
+    <div class="row">
+      <p class="precioU" style="width: 106px; margin-left: 15px; margin-top: 13px"> Precio: <span class="conversionValue"> </span></p>
+      <p class="conversion" style="width: 106px; margin-left: 120px; margin-top: 13px;"> Conversion: <span class="conversionValue"> </span></p>
+    </div>
+    <div class="row">
+      <div>
+      <button type="button" id="calcular" style="margin: 10px; width: 194px;">Calcular</button>
+    </div>
+    <div>
+      <input type="submit" id="submit" style="margin: 10px; width: 194px;"/>
+    </div>
+    </div> 
+  
+</div>
   <br />
   <section class="container">
     <header>Movimientos</header>
@@ -53,6 +83,7 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
     </div>
   </section>
   <footer>&copy 2021</footer>
+</section>
 </body>
 
 {% endblock %}
