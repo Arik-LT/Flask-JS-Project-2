@@ -75,20 +75,7 @@ def par(_from, _to, quantity = 1.0):
     res = requests.get(url)
     data = res.json()["data"]
     quote = data["quote"]
-    print(data)
-    print(quote)
-    return Response(quote)
-
-
-"""
-@app.route('/api/v1/par')
-def par():
-  if request.method == 'POST':
-    print(request.form)
-  
-  return render_template('transactions.html')
-"""
-
+    return Response(res)
 
 
 @app.route("/api/v1/nuevomov", methods = ["POST"])

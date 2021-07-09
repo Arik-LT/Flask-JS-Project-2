@@ -72,3 +72,16 @@ header {
 label {
   padding: 15px;
 }
+
+
+.priceValue{
+  font-size: 18px;
+  color: green;
+  font-weight: 500;
+}
+
+.conversionValue {
+  font-size: 18px;
+  color: darkslateblue;
+  font-weight: 500;
+}

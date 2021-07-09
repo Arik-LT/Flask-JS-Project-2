@@ -64,11 +64,42 @@ function capturaConversion(ev) {
     true
   );
 
-  //xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.onload = () => {
 
-  xhr.onload = recibeRespuesta;
+    const respuesta = JSON.parse(xhr.responseText);
+    
+    const price_converted = respuesta.data.quote[movimiento.conv_to].price
+    
+    document.querySelector(".conversionValue").textContent = (price_converted).toFixed(4) + `  ${movimiento.conv_to}`
+    document.querySelector(".priceValue").textContent = (price_converted / movimiento.cantidad_from).toFixed(8) + "  €"
+  }
+  
   xhr.send();
+
+}
+
+function llamaApiCreaMovimiento(ev) {
+  ev.preventDefault()
+
+  xhr.open("POST", 'http://localhost:5000/api/v1/nuevomov', true)
+
+  xhr.onload = recibeRespuestaCreamovimiento
+
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+  
+  xhr.send(JSON.stringify(movGlobal))
+}
+
+
+
+window.onload = function () {
+  llamaApiCoin();
+
+  document
+    .querySelector("#calcular")
+    .addEventListener("click", capturaConversion);
 };
+
 
 
 /*
@@ -84,10 +115,22 @@ function capturaConversion(ev) {
 
 */
 
-window.onload = function () {
-  llamaApiCoin();
+/*
+() => {
+    if (this.readyState === 4 && this.status === 200) {
+      const respuesta = JSON.parse(this.responseText);
+      if (respuesta.status.error_code !== 0) {
+        alert(
+          "Se ha producido un error en acceso a servidor: " + respuesta.mensaje
+        );
+        return;
+      }
 
-  document
-    .querySelector("#calcular")
-    .addEventListener("click", capturaConversion);
-};
+      console.log(respuesta.quote.price);
+      document.querySelector("#conversionValue").textContent = respuesta.quote.price
+
+
+      llamaApiCoin()
+    }
+  }
+  */
