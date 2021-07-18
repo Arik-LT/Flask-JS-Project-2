@@ -1,3 +1,4 @@
+from os import EX_NOUSER
 from flask import json, render_template, jsonify, request, Response
 from crypto import app
 from requests import Request, Session
@@ -8,7 +9,7 @@ from crypto.dataaccess import DBmanager
 from config import *
 import sqlite3
 from http import HTTPStatus
-import datetime # try to use for date time on sql
+from datetime import datetime
 
 dbManager = DBmanager(app.config.get("DATABASE"))
 
@@ -77,19 +78,95 @@ def par(_from, _to, quantity = 1.0):
     quote = data["quote"]
     return Response(res)
 
-
 @app.route("/api/v1/nuevomov", methods = ["POST"])
 def nuevomov():
   
   try:
-    if request.method == "POST":
-      pass
+    if request.method == 'POST':
+      now = datetime.now()
+      d_string = now.strftime("%d/%m/%Y")
+      t_string = now.strftime("%H:%M:%S")
+
+      dicc = (request.json)
+      print(dicc['cantidad_from'])
+
+      dbManager.modificaTablaSQL("""
+          INSERT INTO movimientos 
+          (date, time, moneda_from, cantidad_from, moneda_to, cantidad_to)
+          VALUES (?, ?, ?, ?, ?, ?)
+          """, [d_string, t_string, dicc['conv_from'], dicc['cantidad_from'], dicc['conv_to'], dicc['cantidad_to']])
+      return jsonify({"status": "success", "mensaje": "registro creado"}), HTTPStatus.CREATED
 
   except sqlite3.Error as e:
+    print(e)
     return jsonify({"status": "fail", "mensaje": "Error en base de datos: {}".format(e)}), HTTPStatus.BAD_REQUEST
 
 
 @app.route("/api/v1/status")
 def status():
-  pass
+
+  net_value = {}
+  for moneda in symbol:
+    query1 = "SELECT sum(cantidad_from) FROM movimientos WHERE moneda_from = '{}'".format(moneda)
+    query2 = "SELECT sum(cantidad_to) FROM movimientos WHERE moneda_to = '{}'".format(moneda)
+
+    consulta1 = dbManager.consultaMuchasSQL(query1)
+    consulta2 = dbManager.consultaMuchasSQL(query2)
+  
+    inicial = consulta1[0]['sum(cantidad_from)']
+
+    canjeado = consulta2[0]['sum(cantidad_to)']
+
+    if canjeado == None:
+      invertido = inicial - 0
+      valor = 0
+
+    if canjeado != None:  #maybe add negative invertido option
+      invertido = inicial - canjeado
+      # ganancias = invertido * -1
+      valor = (canjeado - inicial)*-1
+    
+    if inicial == None:
+      invertido = canjeado
+      valor = canjeado
+    
+    if inicial == None and canjeado == None:
+      invertido = 0
+      valor = 0
+
+    if moneda == 'EUR':
+      net_value['{}'.format(moneda)] = invertido
+    else: 
+      net_value['{}'.format(moneda)] = valor
+  
+  print(net_value)
+
+  return jsonify ({"status": "success", "invertido":invertido})
+
+
+
+
+"""
+  query1 = "SELECT sum(cantidad_from) FROM movimientos WHERE moneda_from = 'XRP'"
+  query2 = "SELECT sum(cantidad_to) FROM movimientos WHERE moneda_to = 'XRP'"
+
+  consulta1 = dbManager.consultaMuchasSQL(query1)
+  consulta2 = dbManager.consultaMuchasSQL(query2)
+
+  inicial = consulta1[0]['sum(cantidad_from)']
+  canjeado = consulta2[0]['sum(cantidad_to)']
+
+  if canjeado == None:
+    invertido = inicial - 0
+  
+  if canjeado != None:
+    invertido = inicial - canjeado
+  
+  if inicial == None:
+    invertido = canjeado
+  
+  if inicial == None and canjeado = None:
+    invertido = 0
+
+"""
 

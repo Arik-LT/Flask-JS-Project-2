@@ -1,3 +1,8 @@
+
+let price_converted;
+const xhr = new XMLHttpRequest();
+const xhr2 = new XMLHttpRequest();
+
 function recibeRespuesta() {
   if (this.readyState === 4 && (this.status === 200 || this.status === 201)) {
     const respuesta = JSON.parse(this.responseText);
@@ -14,9 +19,6 @@ function recibeRespuesta() {
     llamaApiCoin();
   }
 }
-
-const xhr = new XMLHttpRequest();
-const xhr2 = new XMLHttpRequest();
 
 function muestraMovimientos() {
   if (this.readyState === 4 && this.status === 200) {
@@ -68,28 +70,34 @@ function capturaConversion(ev) {
 
     const respuesta = JSON.parse(xhr.responseText);
     
-    const price_converted = respuesta.data.quote[movimiento.conv_to].price
+    price_converted = respuesta.data.quote[movimiento.conv_to].price
     
-    document.querySelector(".conversionValue").textContent = (price_converted).toFixed(4) + `  ${movimiento.conv_to}`
-    document.querySelector(".priceValue").textContent = (price_converted / movimiento.cantidad_from).toFixed(8) + "  €"
+    document.querySelector(".conversionValue").textContent = (price_converted).toFixed(6) + `  ${movimiento.conv_to}`
+    document.querySelector(".priceValue").textContent = (movimiento.cantidad_from / price_converted).toFixed(6) + "  €"
   }
   
   xhr.send();
 
 }
 
-function llamaApiCreaMovimiento(ev) {
+function creaMovimiento(ev) {
   ev.preventDefault()
 
-  xhr.open("POST", 'http://localhost:5000/api/v1/nuevomov', true)
+  let movimiento = {};
+  movimiento.conv_from = document.querySelector("#conv_from").value;
+  movimiento.cantidad_from = Number(document.querySelector("#cantidad_from").value);
+  movimiento.conv_to = document.querySelector("#conv_to").value;
+  movimiento.cantidad_to = price_converted
+  console.log(movimiento);
 
-  xhr.onload = recibeRespuestaCreamovimiento
+  xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
+
+  xhr.onload = recibeRespuesta
 
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
   
-  xhr.send(JSON.stringify(movGlobal))
+  xhr.send(JSON.stringify(movimiento))
 }
-
 
 
 window.onload = function () {
@@ -98,6 +106,10 @@ window.onload = function () {
   document
     .querySelector("#calcular")
     .addEventListener("click", capturaConversion);
+    
+  document
+    .querySelector("#submit")
+    .addEventListener("click", creaMovimiento);
 };
 
 
