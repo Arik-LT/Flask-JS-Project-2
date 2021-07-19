@@ -74,8 +74,7 @@ def movimientos():
 def par(_from, _to, quantity = 1.0):
     url = f"https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={quantity}&symbol={_from}&convert={_to}&CMC_PRO_API_KEY={config.coin_key}"
     res = requests.get(url)
-    data = res.json()["data"]
-    quote = data["quote"]
+
     return Response(res)
 
 @app.route("/api/v1/nuevomov", methods = ["POST"])
@@ -105,44 +104,56 @@ def nuevomov():
 @app.route("/api/v1/status")
 def status():
 
-  net_value = {}
+  cartera = {}
+  valor_eur_total_criptos = 0 
   for moneda in symbol:
     query1 = "SELECT sum(cantidad_from) FROM movimientos WHERE moneda_from = '{}'".format(moneda)
     query2 = "SELECT sum(cantidad_to) FROM movimientos WHERE moneda_to = '{}'".format(moneda)
 
+    # need to add try here
     consulta1 = dbManager.consultaMuchasSQL(query1)
     consulta2 = dbManager.consultaMuchasSQL(query2)
   
     inicial = consulta1[0]['sum(cantidad_from)']
 
-    canjeado = consulta2[0]['sum(cantidad_to)']
-
-    if canjeado == None:
-      invertido = inicial - 0
-      valor = 0
-
-    if canjeado != None:  #maybe add negative invertido option
-      invertido = inicial - canjeado
-      # ganancias = invertido * -1
-      valor = (canjeado - inicial)*-1
-    
-    if inicial == None:
-      invertido = canjeado
-      valor = canjeado
-    
-    if inicial == None and canjeado == None:
-      invertido = 0
-      valor = 0
+    comprado = consulta2[0]['sum(cantidad_to)']
 
     if moneda == 'EUR':
-      net_value['{}'.format(moneda)] = invertido
-    else: 
-      net_value['{}'.format(moneda)] = valor
-  
-  print(net_value)
+      if inicial == None and comprado == None:
+        invertido = 0
+      elif comprado == None:
+        invertido =  0 - inicial
+      else:
+        invertido = comprado - inicial
 
-  return jsonify ({"status": "success", "invertido":invertido})
+    else:
+      if inicial == None and comprado == None:
+          amount = 0
+      
+      elif inicial == None:
+        amount = comprado
 
+      else:
+        amount = comprado - inicial 
+
+      if amount != 0:
+        try:
+          url = f"https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={amount}&symbol={moneda}&convert=EUR&CMC_PRO_API_KEY={config.coin_key}"
+          r = requests.get(url).json()
+          euro_value = r["data"]["quote"]["EUR"]["price"]
+          valor_eur_total_criptos += euro_value
+          
+        except (ConnectionError, Timeout, TooManyRedirects) as e:
+          return jsonify({"status": "fail", "mensaje": str(e)})
+
+      if amount == 0:
+        euro_value = 0
+
+      cartera['{}'.format(moneda)] = {"net": amount, "EUR": euro_value}
+
+    value = {"invertido": invertido, "valor_criptos":valor_eur_total_criptos}
+
+  return jsonify ({"status": "success", "cartera":cartera, "net_valor": value})
 
 
 
