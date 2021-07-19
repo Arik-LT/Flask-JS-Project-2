@@ -122,9 +122,9 @@ def status():
       if inicial == None and comprado == None:
         invertido = 0
       elif comprado == None:
-        invertido =  0 - inicial
+        invertido =  inicial
       else:
-        invertido = comprado - inicial
+        invertido = inicial - comprado
 
     else:
       if inicial == None and comprado == None:
@@ -151,7 +151,7 @@ def status():
 
       cartera['{}'.format(moneda)] = {"net": amount, "EUR": euro_value}
 
-    value = {"invertido": invertido, "valor_criptos":valor_eur_total_criptos}
+    value = {"invertido": invertido, "valor_criptos":valor_eur_total_criptos, "net_profit": valor_eur_total_criptos - invertido}
 
   return jsonify ({"status": "success", "cartera":cartera, "net_valor": value})
 
