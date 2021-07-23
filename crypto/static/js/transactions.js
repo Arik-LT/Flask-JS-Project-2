@@ -100,6 +100,7 @@ function llamaApiStatus() {
 
 function capturaConversion(ev) {
   ev.preventDefault();
+  muestraStatus()
 
   let movimiento = {};
   movimiento.conv_from = document.querySelector("#conv_from").value;
@@ -116,6 +117,17 @@ function capturaConversion(ev) {
     alert("La cantidad debe ser positiva")
   }
 
+  if (movimiento.conv_from !== "EUR") {
+    for (let i = 0; i < cartera.length; i++) {
+      if (cartera[i].name = movimiento.conv_from) {
+        if (movimiento.cantidad_from > cartera[i].net) {
+          alert(`No tienes sufcientes ${movimiento.conv_from} para realizar esta transacción`)
+          break
+        }
+      }
+    }
+  }
+
   xhr.open(
     "GET",
     `http://localhost:5000/api/v1/par/${movimiento.conv_from}/${movimiento.conv_to}/${movimiento.cantidad_from}`,
@@ -123,7 +135,14 @@ function capturaConversion(ev) {
   );
 
   xhr.onload = () => {
+    if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 201)) {
     const respuesta = JSON.parse(xhr.responseText);
+    console.log(respuesta.status.error_message)
+
+    if (respuesta.status.error_message !== null) {
+      alert("Se ha producido un error en la consulta");
+      return;
+    }
 
     price_converted = respuesta.data.quote[movimiento.conv_to].price;
 
@@ -132,7 +151,7 @@ function capturaConversion(ev) {
     document.querySelector(".priceValue").textContent =
       (movimiento.cantidad_from / price_converted).toFixed(6) + "  €";
   };
-
+}
   xhr.send();
 }
 
@@ -149,7 +168,6 @@ function creaMovimiento(ev) {
   );
   movimiento.conv_to = document.querySelector("#conv_to").value;
   movimiento.cantidad_to = price_converted;
-  console.log(movimiento);
 
   xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
 

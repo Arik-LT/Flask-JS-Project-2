@@ -62,6 +62,7 @@ def movimientos():
   try:
     lista = dbManager.consultaMuchasSQL(query)
     return jsonify ({"status": "success", "movimientos":lista})
+
   except sqlite3.Error as e:
     return jsonify ({"status": "fail", "mensaje":str(e)})
 
@@ -147,7 +148,7 @@ def status():
 
       value = {"invertido": invertido, "valor_criptos":valor_eur_total_criptos, "net_profit": valor_eur_total_criptos - invertido}
 
-    return jsonify ({"status": "success", "cartera":cartera, "net_valor": value})
+    return jsonify ({"status": "success", "cartera":cartera, "net_valor": value}), HTTPStatus.OK
     
   except sqlite3.Error as e:
     return jsonify({"status": "fail", "mensaje": "Error en base de datos: {}".format(e)}), HTTPStatus.BAD_REQUEST

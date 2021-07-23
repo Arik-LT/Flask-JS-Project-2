@@ -23,6 +23,7 @@ label.logos {
   line-height: 80px;
   margin: auto;
   width: 50%;
+  text-align: center;
 
 }
 
@@ -57,7 +58,6 @@ nav #icon {
   color: grey;
   font-size: 30px;
   line-height: 80px;
-  float: right;
   margin-right: 40px;
   cursor: pointer;
 }
@@ -95,7 +95,5 @@ label {
 }
 
 #right {
-
   width: 50%;
-
 }

@@ -18,7 +18,7 @@ cursor.execute(command2)
 
 #cursor.execute("INSERT INTO users VALUES (1, 'ariklevygmailcom', 'a2425')")
 
-cursor.execute("INSERT INTO movimientos VALUES (1, '2021-06-12', '18:26:30', 'BTC', 0.2, 'ETH', 9)")
+cursor.execute("INSERT INTO movimientos VALUES (1, '2021/06/12', '18:26:30', 'BTC', 0.2, 'ETH', 9)")
 
 
 connection.commit()

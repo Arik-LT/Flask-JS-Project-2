@@ -1,16 +1,7 @@
 {% extends "base.html" %} {% block title %}Transactions{% endblock %} {% block
 js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
 <body>
-  <section class="container">
-    <header>Crypto Sim</header>
-    <p>
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia, est
-      quam! Laboriosam, ab. Qui perspiciatis nihil eligendi cum tenetur. Sunt
-      molestias quis fugiat voluptatibus eaque?
-    </p>
-
-    <div id = "left">
-      <div>
+    <div style="float: left; width: 60%; padding: 40px;">
       <div><h3 style="color: firebrick;">Nuevo Movimineto</h3></div>
       <div class="row">
         <label for="conversion">From</label>
@@ -50,7 +41,6 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
         <label for="cantidad_from">Cantidad</label>
         <input type="number" name="cantidad_from" id="cantidad_from" step="any"
         style="width: 106px;"" />
-      </div>
       </div>
 
       <div class="row">
@@ -95,7 +85,7 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
       </div>
     </div>
 
-    <div id="right">
+    <div style="float: left; width: 40%; padding: 40px;">
         <div><h3 style="color: firebrick;">Estado de la inversion</h3></div>
         <div style="margin-left: 12px;">
         <div class="row">
@@ -111,12 +101,11 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
         </div>
       </div>
     </div>
-  
 
-    <br>
-    <br />
-    <section class="container">
-      <header>Movimientos</header>
+    <div style="display: inline-block; width: 100%;">
+      <br>
+      <br>
+      <header style="text-align: left;">Movimientos</header>
       <div class="lista-movimientos">
         <table class="tabla-movimientos">
           <thead>
@@ -132,9 +121,8 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
           <tbody></tbody>
         </table>
       </div>
-    </section>
-    <footer>&copy 2021</footer>
-  </section>
+    </div>
+
 </body>
 
 {% endblock %}
