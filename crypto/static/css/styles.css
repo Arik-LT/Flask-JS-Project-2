@@ -21,6 +21,9 @@ label.logos {
   color: whitesmoke;
   padding: 0 40px;
   line-height: 80px;
+  margin: auto;
+  width: 50%;
+
 }
 
 nav ul {
@@ -86,3 +89,13 @@ label {
   font-weight: 500;
 }
 
+#left {
+  width: 50%;
+  float: right;
+}
+
+#right {
+
+  width: 50%;
+
+}

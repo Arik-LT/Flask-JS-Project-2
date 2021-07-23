@@ -8,9 +8,10 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
       quam! Laboriosam, ab. Qui perspiciatis nihil eligendi cum tenetur. Sunt
       molestias quis fugiat voluptatibus eaque?
     </p>
-    <div>
-      <div id="first">
-      <div><h4>Formulario</h4></div>
+
+    <div id = "left">
+      <div>
+      <div><h3 style="color: firebrick;">Nuevo Movimineto</h3></div>
       <div class="row">
         <label for="conversion">From</label>
         <select name="conversion" id="conv_from" style="width: 150px">
@@ -50,18 +51,8 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
         <input type="number" name="cantidad_from" id="cantidad_from" step="any"
         style="width: 106px;"" />
       </div>
-    </div>
-    <div style="float: right;">
-      <div><h4>Estado de la inversion</h4></div>
-      <div class="row" style="float: right;">
-        <p >Invertido: <span class="Invertido"> </span></p>
-        <br />
-        <p>
-          Valor: <span class="Valor"> </span>
-        </p>
       </div>
-    </div>
-    </div>
+
       <div class="row">
         <p
           class="precioU"
@@ -78,23 +69,51 @@ js %}/static/js/transactions.js{% endblock %} {% block content%} <br /><br />
           <span class="conversionValue"> </span>
         </p>
       </div>
+
       <div class="row">
         <div>
           <button
             type="button"
             id="calcular"
-            style="margin: 10px; width: 194px"
+            style="margin: 10px; width: 120px"
           >
             Calcular
           </button>
         </div>
         <div>
-          <input type="submit" id="submit" style="margin: 10px; width: 194px" />
+          <button
+            type="button"
+            id="cancelar"
+            style="margin: 10px; width: 120px"
+          >
+            Cancelar
+          </button>
+        </div>
+        <div>
+          <input type="submit" id="submit" style="margin: 10px; width: 120px" />
         </div>
       </div>
-
     </div>
 
+    <div id="right">
+        <div><h3 style="color: firebrick;">Estado de la inversion</h3></div>
+        <div style="margin-left: 12px;">
+        <div class="row">
+          <p style="font-size: 20px;">Invertido: <span class="Invertido"> </span></p>
+        </div>
+          <br />
+        <div class="row">
+          <p style="font-size: 20px;">Valor: <span class="Valor"> </span></p>
+        </div>
+        <br>
+        <div class="row">
+          <p style="font-size: 20px;">Beneficio Neto : <span class="Beneficio"> </span></p>
+        </div>
+      </div>
+    </div>
+  
+
+    <br>
     <br />
     <section class="container">
       <header>Movimientos</header>

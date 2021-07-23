@@ -2,6 +2,7 @@
   %}/static/js/home.js{% endblock %} {% block content%}
   <br><br><br>
   <body>
+  <div style="float: left; width: 70%; padding: 20px;" >
     <section class="container">
       <header>Crypto Current Prices</header>
       <div class="lista-precios">
@@ -18,8 +19,28 @@
         </table>
       </div>
     </section>
-    <footer>&copy 2021</footer>
-  </body>
+  </div>
+
+  <div style="float: right; width: 30%; margin-top: 20px;">
+    <section class="container">
+      <header style="color: blue;">Wallet</header>
+      <div class="wallet">
+        <table class="tabla-wallet">
+          <thead>
+            <tr>
+              <th style="color: blue;">Coin</th>
+              <th style="color: blue;">Cantidad</th>
+              <th style="color: blue;">Valor</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
   
+</body>
+
+  <footer style="float: left;">&copy 2021</footer>
   {% endblock %}
   
