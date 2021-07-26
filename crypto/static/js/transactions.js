@@ -1,5 +1,5 @@
 let price_converted;
-let cartera
+let cartera;
 
 const xhr = new XMLHttpRequest();
 const xhr2 = new XMLHttpRequest();
@@ -46,7 +46,7 @@ function muestraMovimientos() {
       <td>${movimientos.cantidad_to.toFixed(2)}</td>
       `;
       fila.innerHTML = dentro;
-      
+
       tbody.appendChild(fila);
     }
   }
@@ -61,29 +61,32 @@ function muestraStatus() {
       return;
     }
 
-    cartera = respuesta.cartera
-    document.querySelector(".Invertido").textContent = respuesta.net_valor.invertido.toFixed(2) + " €"
+    cartera = respuesta.cartera;
+    document.querySelector(".Invertido").textContent =
+      respuesta.net_valor.invertido.toFixed(2) + " €";
     if (respuesta.net_valor.invertido > 0) {
-    document.querySelector(".Invertido").style.color="Red"
+      document.querySelector(".Invertido").style.color = "Red";
     } else {
-    document.querySelector(".Invertido").style.color="Green"
+      document.querySelector(".Invertido").style.color = "Green";
     }
 
-    document.querySelector(".Valor").textContent = respuesta.net_valor.valor_criptos.toFixed(2) + " €"
+    document.querySelector(".Valor").textContent =
+      respuesta.net_valor.valor_criptos.toFixed(2) + " €";
     if (respuesta.net_valor.invertido > 0) {
-      document.querySelector(".Valor").style.color="Green"
-      } else {
-      document.querySelector(".Valor").style.color="Red"
-      }
+      document.querySelector(".Valor").style.color = "Green";
+    } else {
+      document.querySelector(".Valor").style.color = "Red";
+    }
 
-    document.querySelector(".Beneficio").textContent = respuesta.net_valor.net_profit.toFixed(2) + " €"
+    document.querySelector(".Beneficio").textContent =
+      respuesta.net_valor.net_profit.toFixed(2) + " €";
     if (respuesta.net_valor.invertido > 0) {
-      document.querySelector(".Beneficio").style.color="Green"
-      } else {
-      document.querySelector(".Beneficio").style.color="Red"
-      }
+      document.querySelector(".Beneficio").style.color = "Green";
+    } else {
+      document.querySelector(".Beneficio").style.color = "Red";
+    }
   }
-  return cartera
+  return cartera;
 }
 
 function llamaApiCoin() {
@@ -100,29 +103,34 @@ function llamaApiStatus() {
 
 function capturaConversion(ev) {
   ev.preventDefault();
-  muestraStatus()
+  muestraStatus();
 
   let movimiento = {};
   movimiento.conv_from = document.querySelector("#conv_from").value;
   movimiento.cantidad_from = document.querySelector("#cantidad_from").value;
   movimiento.conv_to = document.querySelector("#conv_to").value;
 
-  if (movimiento.conv_from === movimiento.conv_to){
-    alert("Las monedas From y To deben ser distintas")
+  if (movimiento.conv_from === movimiento.conv_to) {
+    alert("Las monedas From y To deben ser distintas");
   }
-  if(!movimiento.cantidad_from){
-    alert("Debe seleccionar una cantidad")
+
+  if (!movimiento.cantidad_from) {
+    alert("Debe seleccionar una cantidad");
   }
-  if (movimiento.cantidad_from < 0){
-    alert("La cantidad debe ser positiva")
+  if (movimiento.cantidad_from < 0) {
+    alert("La cantidad debe ser positiva");
   }
 
   if (movimiento.conv_from !== "EUR") {
     for (let i = 0; i < cartera.length; i++) {
-      if (cartera[i].name = movimiento.conv_from) {
+      if (cartera[i].name === movimiento.conv_from) {
         if (movimiento.cantidad_from > cartera[i].net) {
-          alert(`No tienes sufcientes ${movimiento.conv_from} para realizar esta transacción`)
-          break
+          alert(
+            `No tienes sufcientes ${movimiento.conv_from} para realizar esta transacción, pero se mostrara el hipotetico valor`
+          );
+          break;
+        } else {
+          break;
         }
       }
     }
@@ -136,30 +144,30 @@ function capturaConversion(ev) {
 
   xhr.onload = () => {
     if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 201)) {
-    const respuesta = JSON.parse(xhr.responseText);
-    console.log(respuesta.status.error_message)
+      const respuesta = JSON.parse(xhr.responseText);
 
-    if (respuesta.status.error_message !== null) {
-      alert("Se ha producido un error en la consulta");
-      return;
+      if (respuesta.status.error_message !== null) {
+        alert("Se ha producido un error en la consulta");
+        return;
+      }
+
+      price_converted = respuesta.data.quote[movimiento.conv_to].price;
+
+      document.querySelector(".conversionValue").textContent =
+        price_converted.toFixed(6) + `  ${movimiento.conv_to}`;
+      document.querySelector(".priceValue").textContent =
+        (movimiento.cantidad_from / price_converted).toFixed(6) + "  €";
     }
-
-    price_converted = respuesta.data.quote[movimiento.conv_to].price;
-
-    document.querySelector(".conversionValue").textContent =
-      price_converted.toFixed(6) + `  ${movimiento.conv_to}`;
-    document.querySelector(".priceValue").textContent =
-      (movimiento.cantidad_from / price_converted).toFixed(6) + "  €";
   };
-}
   xhr.send();
 }
 
 function creaMovimiento(ev) {
   ev.preventDefault();
-  
-  muestraStatus()
+
+  muestraStatus();
   console.log(cartera);
+  console.log(cartera.length);
 
   let movimiento = {};
   movimiento.conv_from = document.querySelector("#conv_from").value;
@@ -169,13 +177,37 @@ function creaMovimiento(ev) {
   movimiento.conv_to = document.querySelector("#conv_to").value;
   movimiento.cantidad_to = price_converted;
 
-  xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
+  if (movimiento.conv_from !== "EUR") {
+    for (let i = 0; i < cartera.length; i++) {
+      if (cartera[i].name === movimiento.conv_from) {
+        if (movimiento.cantidad_from > cartera[i].net) {
+          alert(
+            `No tienes sufcientes ${movimiento.conv_from} para realizar esta transacción`
+          );
+          break;
+        } else {
+          xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
+          xhr.onload = recibeRespuesta;
+          xhr.setRequestHeader(
+            "Content-Type",
+            "application/json;charset=UTF-8"
+          );
+          xhr.send(JSON.stringify(movimiento));
+        }
+      }
+    }
+  } else {
+    xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
+    xhr.onload = recibeRespuesta;
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(movimiento));
+  }
 
-  xhr.onload = recibeRespuesta;
+  document.querySelector("#cantidad_from").value = "";
+  document.querySelector(".conversionValue").textContent = "";
+  document.querySelector(".priceValue").textContent = "";
 
-  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-  xhr.send(JSON.stringify(movimiento));
+  llamaApiStatus();
 }
 
 window.onload = function () {
@@ -188,11 +220,10 @@ window.onload = function () {
     .addEventListener("click", capturaConversion);
 
   document.querySelector("#cancelar").addEventListener("click", () => {
-    document.querySelector("#cantidad_from").value = ''
-    document.querySelector(".conversionValue").textContent = ''
-    document.querySelector(".priceValue").textContent = ''
+    document.querySelector("#cantidad_from").value = "";
+    document.querySelector(".conversionValue").textContent = "";
+    document.querySelector(".priceValue").textContent = "";
   });
 
   document.querySelector("#submit").addEventListener("click", creaMovimiento);
 };
-
