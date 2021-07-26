@@ -21,7 +21,7 @@
 
 <h3> 3. Crear base de datos </h3>
 
-<p> Lanzar el fichero "createDB.py", guardar este fichero en la carpeta data </p>
+<p> Lanzar el fichero "createDB.py", guardar este fichero en una carpeta eg."data" </p>
 
 <h3> 4. Crear fichero "config.py"</h3>
 

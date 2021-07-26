@@ -60,8 +60,10 @@ function muestraStatus() {
       alert("Se ha producido un error en la consulta");
       return;
     }
-
+    console.log(respuesta);
     cartera = respuesta.cartera;
+    console.log(respuesta.net_valor);
+
     document.querySelector(".Invertido").textContent =
       respuesta.net_valor.invertido.toFixed(2) + " €";
     if (respuesta.net_valor.invertido > 0) {
@@ -166,8 +168,6 @@ function creaMovimiento(ev) {
   ev.preventDefault();
 
   muestraStatus();
-  console.log(cartera);
-  console.log(cartera.length);
 
   let movimiento = {};
   movimiento.conv_from = document.querySelector("#conv_from").value;
