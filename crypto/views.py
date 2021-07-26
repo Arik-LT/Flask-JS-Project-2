@@ -110,7 +110,6 @@ def status():
       consulta2 = dbManager.consultaMuchasSQL(query2)
     
       inicial = consulta1[0]['sum(cantidad_from)']
-
       comprado = consulta2[0]['sum(cantidad_to)']
 
       if moneda == 'EUR':

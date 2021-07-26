@@ -209,7 +209,6 @@ function creaMovimiento(ev) {
   document.querySelector(".conversionValue").textContent = "";
   document.querySelector(".priceValue").textContent = "";
 
-  llamaApiStatus();
 }
 
 window.onload = function () {
@@ -228,4 +227,6 @@ window.onload = function () {
   });
 
   document.querySelector("#submit").addEventListener("click", creaMovimiento);
+
+  document.querySelector("#refrescar").addEventListener("click", llamaApiStatus);
 };
