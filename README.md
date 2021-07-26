@@ -25,9 +25,9 @@
 
 <h3> 4. Crear fichero "config.py"</h3>
 
-<p> Crear fichero config.py informando los siguientes campos:
+<p> Crear fichero "config.py" usando "config_template" informando los siguientes campos:
     <br />
-    coin_key = Generaremos nuestra propia key a traves de coin market cap Api, 
+    coin_key = Generaremos nuestra propia key a traves de coinmarket cap Api, 
     <br />
     secret_key = Crear una llave secreta
     <br />
