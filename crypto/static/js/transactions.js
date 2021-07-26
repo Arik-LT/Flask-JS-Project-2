@@ -177,30 +177,32 @@ function creaMovimiento(ev) {
   movimiento.conv_to = document.querySelector("#conv_to").value;
   movimiento.cantidad_to = price_converted;
 
-  if (movimiento.conv_from !== "EUR") {
-    for (let i = 0; i < cartera.length; i++) {
-      if (cartera[i].name === movimiento.conv_from) {
-        if (movimiento.cantidad_from > cartera[i].net) {
-          alert(
-            `No tienes sufcientes ${movimiento.conv_from} para realizar esta transacción`
-          );
-          break;
-        } else {
-          xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
-          xhr.onload = recibeRespuesta;
-          xhr.setRequestHeader(
-            "Content-Type",
-            "application/json;charset=UTF-8"
-          );
-          xhr.send(JSON.stringify(movimiento));
+  if (movimiento.cantidad_to !== 0 & movimiento.cantidad_from !==0) {
+    if (movimiento.conv_from !== "EUR") {
+      for (let i = 0; i < cartera.length; i++) {
+        if (cartera[i].name === movimiento.conv_from) {
+          if (movimiento.cantidad_from > cartera[i].net) {
+            alert(
+              `No tienes sufcientes ${movimiento.conv_from} para realizar esta transacción`
+            );
+            break;
+          } else {
+            xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
+            xhr.onload = recibeRespuesta;
+            xhr.setRequestHeader(
+              "Content-Type",
+              "application/json;charset=UTF-8"
+            );
+            xhr.send(JSON.stringify(movimiento));
+          }
         }
       }
+    } else {
+      xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
+      xhr.onload = recibeRespuesta;
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.send(JSON.stringify(movimiento));
     }
-  } else {
-    xhr.open("POST", `http://localhost:5000/api/v1/nuevomov`, true);
-    xhr.onload = recibeRespuesta;
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.send(JSON.stringify(movimiento));
   }
 
   document.querySelector("#cantidad_from").value = "";
